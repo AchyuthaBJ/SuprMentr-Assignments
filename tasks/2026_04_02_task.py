@@ -1,0 +1,43 @@
+"""
+Image editor tool
+create an app
+
+upload image 
+grey scale image
+blurred image
+edge detection
+
+"""
+
+import streamlit as st
+import cv2
+import numpy as np
+from PIL import Image
+
+st.title("🖼️ Image Editor Tool")
+
+# Upload image
+uploaded_file = st.file_uploader("Upload an Image", type=["jpg", "png", "jpeg"])
+
+if uploaded_file is not None:
+    # Convert to OpenCV format
+    image = Image.open(uploaded_file)
+    image_np = np.array(image)
+
+    st.subheader("Original Image")
+    st.image(image, use_column_width=True)
+
+    # Grayscale
+    gray = cv2.cvtColor(image_np, cv2.COLOR_RGB2GRAY)
+    st.subheader("Grayscale Image")
+    st.image(gray, use_column_width=True, channels="GRAY")
+
+    # Blur
+    blur = cv2.GaussianBlur(gray, (15, 15), 0)
+    st.subheader("Blurred Image")
+    st.image(blur, use_column_width=True, channels="GRAY")
+
+    # Edge Detection
+    edges = cv2.Canny(gray, 100, 200)
+    st.subheader("Edge Detection")
+    st.image(edges, use_column_width=True, channels="GRAY")
